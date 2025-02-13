@@ -26,12 +26,10 @@ export const resolvers = {
                 const record = new Article(article);
                 await record.save();
 
-                const success = true;
-                const message = 'create successfully 1 !';
                 return {
                     article: record,
-                    success: success,
-                    messge: message
+                    success: true,
+                    message: 'update successfully !'
                 }
             } catch(error) {
                 const result = {
@@ -56,6 +54,28 @@ export const resolvers = {
             } catch(error) {
                 console.log(error);
                 return 'delete failed';
+            }
+        },
+        updateArticle: async (_: any, args: any) => {
+            try {
+                const { id, article } = args;
+                await Article.updateOne(
+                    { _id: id, deleted: false },
+                    article
+                )
+                const record = await Article.findOne({ _id: id, deleted: false });
+                return {
+                    article: record,
+                    success: true,
+                    message: 'update successfully !'
+                }
+            } catch(error) {
+                const result = {
+                    success: false,
+                    message: 'update failed'
+                }
+                console.log(error);
+                return result;
             }
         }
     }
