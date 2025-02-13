@@ -20,11 +20,43 @@ export const resolvers = {
     },
     Mutation: {
         createArticle: async (_: any, args: any) => {
-            const { article } = args;
-            const record = new Article(article);
-            await record.save();
+            try {
+                const { article } = args;
             
-            return record;
+                const record = new Article(article);
+                await record.save();
+
+                const success = true;
+                const message = 'create successfully 1 !';
+                return {
+                    article: record,
+                    success: success,
+                    messge: message
+                }
+            } catch(error) {
+                const result = {
+                    success: false,
+                    message: 'create failed'
+                }
+                console.log(error);
+                return result;
+            }
+        },
+        deleteArticle: async (_: any, args: any) => {
+            try {
+                const { id } = args;
+                await Article.updateOne(
+                    { _id: id },
+                    { 
+                        deleted: true,
+                        deletedAt: new Date()
+                    }
+                );
+                return 'deleted successfully !'
+            } catch(error) {
+                console.log(error);
+                return 'delete failed';
+            }
         }
     }
 }

@@ -19,7 +19,13 @@ export const typeDefs = gql`
         avatar: String,
         description: String
     }
+    type ArticleOutput {
+        article: Article,
+        success: Boolean,
+        message: String
+    }
     type Mutation {
-        createArticle(article: ArticleInput): Article
+        createArticle(article: ArticleInput): ArticleOutput
+        deleteArticle(id: ID): String
     }
 `;
