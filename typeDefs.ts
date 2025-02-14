@@ -1,16 +1,18 @@
 import { gql } from "apollo-server-express";
 
 export const typeDefs = gql`
-    type Article {
-        id: ID,
-        title: String,
-        avatar: String,
-        description: String
-    }
     type Category {
         id: ID,
         title: String,
         avatar: String,
+    }
+
+    type Article {
+        id: ID,
+        title: String,
+        avatar: String,
+        description: String,
+        category: Category
     }
 
     type Query {
