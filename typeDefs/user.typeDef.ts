@@ -9,6 +9,10 @@ export const typeDefsUser = gql`
         code: Int,
         message: String
     }
+    
+    type Query {
+        getUser: User
+    }
 
     input RegisterUserInput {
         fullName: String,

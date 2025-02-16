@@ -1,7 +1,30 @@
+import { Query } from "mongoose";
 import { generateRandomString } from "../Helpers/generate";
 import User from "../Model/user.Model";
 import bcrypt from 'bcrypt';
+import { Token } from "graphql";
 export const resolversUser = {
+    Query: {
+        getUser: async (_: any, args: any, context: any) => {
+            try {
+                if (context.user === '') {
+                    return {
+                        code: 400, 
+                        message: 'Cant access this router !'
+                    }
+                }
+                return {
+                    code: 200,
+                    message: 'success',
+                    id: context.user.id,
+                    fullName: context.user.fullName,
+                    email: context.user.email,
+                }
+            } catch(error) {
+                console.log(error);
+            }
+        }
+    },
     Mutation: {
         registerUser: async (_: any, args: any) => {
             try {
