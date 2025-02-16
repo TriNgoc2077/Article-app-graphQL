@@ -4,32 +4,36 @@ import Category from "../Model/category.Model";
 export const resolversArticle = {
     Query: {
         getListArticle: async (_: any, args: any) => {
-            const { sortKey, sortValue, currentPage, limitItem, filterKey, filterValue, keyword } = args;
-            const find: Record<string, any> = {
-                deleted: false
-            };
-            //Sort
-            const sort: Record<string, any> = {};
-            if (sortKey && sortValue) {
-                sort[sortKey] = sortValue; 
+            try {
+                const { sortKey, sortValue, currentPage, limitItem, filterKey, filterValue, keyword } = args;
+                const find: Record<string, any> = {
+                    deleted: false
+                };
+                //Sort
+                const sort: Record<string, any> = {};
+                if (sortKey && sortValue) {
+                    sort[sortKey] = sortValue; 
+                }
+                //Pagination
+                let skip = 0;
+                if (currentPage && limitItem) {
+                    skip = (currentPage - 1) * limitItem;
+                }
+                //Filter
+                if (filterKey && filterValue) {
+                    find[filterKey] = filterValue;
+                }
+                //Search
+                let keywordRegex;
+                if (keyword) {
+                    keywordRegex = new RegExp(keyword, "i");
+                    find["title"] = keywordRegex;
+                }
+                const articles = await Article.find(find).sort(sort).limit(limitItem).skip(skip);
+                return articles; 
+            } catch(error) {
+                console.log(error);
             }
-            //Pagination
-            let skip = 0;
-            if (currentPage && limitItem) {
-                skip = (currentPage - 1) * limitItem;
-            }
-            //Filter
-            if (filterKey && filterValue) {
-                find[filterKey] = filterValue;
-            }
-            //Search
-            let keywordRegex;
-            if (keyword) {
-                keywordRegex = new RegExp(keyword, "i");
-                find["title"] = keywordRegex;
-            }
-            const articles = await Article.find(find).sort(sort).limit(limitItem).skip(skip);
-            return articles; 
         },
         getArticle: async (_: any, args: any) => {
             const { id } = args;
