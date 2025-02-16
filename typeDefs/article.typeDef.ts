@@ -1,12 +1,6 @@
 import { gql } from "apollo-server-express";
 
-export const typeDefs = gql`
-    type Category {
-        id: ID,
-        title: String,
-        avatar: String,
-    }
-
+export const typeDefsArticle = gql`
     type Article {
         id: ID,
         title: String,
@@ -16,30 +10,18 @@ export const typeDefs = gql`
     }
 
     type Query {
-        hello: String,
         getListArticle: [Article],
         getArticle(id: ID): Article,
-        getListCategory: [Category],
-        getCategory(id: ID): Category,
     }
 
     input ArticleInput {
         title: String,
         avatar: String,
-        description: String
+        description: String,
+        categoryId: String
     }
     type ArticleOutput {
         article: Article,
-        success: Boolean,
-        message: String
-    }
-
-    input CategoryInput {
-        title: String,
-        avatar: String,
-    }
-    type CategoryOutput {
-        category: Category,
         success: Boolean,
         message: String
     }
@@ -47,11 +29,5 @@ export const typeDefs = gql`
         createArticle(article: ArticleInput): ArticleOutput
         deleteArticle(id: ID): String
         updateArticle(id: ID, article: ArticleInput): ArticleOutput
-
-        
-        createCategory(category: CategoryInput): CategoryOutput
-        updateCategory(id: ID, category: CategoryInput): CategoryOutput
-        deleteCategory(id: ID): String
-
     }
 `;
