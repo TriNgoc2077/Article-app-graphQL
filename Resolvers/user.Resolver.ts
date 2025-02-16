@@ -40,6 +40,34 @@ export const resolversUser = {
                     message: (error as Error).message
                 }
             }
+        },
+        loginUser: async (_: any, args: any) => {
+            const { email, password } = args.user;
+            const infoUser = await User.findOne({
+                email: email,
+                deleted: false
+            });
+            if (!infoUser) {
+                return {
+                    code: 400,
+                    message: 'User not found !'
+                }
+            }
+            const isMatch = await bcrypt.compare(password, infoUser.password!);            
+            if (!isMatch) {
+                return {
+                    code: 400,
+                    message: 'Password is incorrect !'
+                }
+            }
+            return {
+                code: 200,
+                message: 'Login successfully !',
+                id: infoUser.id,
+                fullName: infoUser.fullName,
+                email: infoUser.email,
+                token: infoUser.token
+            }
         }
     }
 }
