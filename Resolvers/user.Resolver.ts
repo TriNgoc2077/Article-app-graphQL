@@ -1,8 +1,6 @@
-import { Query } from "mongoose";
 import { generateRandomString } from "../Helpers/generate";
 import User from "../Model/user.Model";
 import bcrypt from 'bcrypt';
-import { Token } from "graphql";
 export const resolversUser = {
     Query: {
         getUser: async (_: any, args: any, context: any) => {
